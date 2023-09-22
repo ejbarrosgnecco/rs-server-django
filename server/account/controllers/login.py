@@ -1,4 +1,4 @@
-from ...server.utils.connection import get_mongo_connection
+from server.utils.connection import get_mongo_connection
 from ..utils.access_tokens.portal.generate_token import NewAccessToken
 import bcrypt
 
