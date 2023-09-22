@@ -1,0 +1,62 @@
+{
+    "bsonType": "object",
+    "required": ["firstName", "lastName", "emailAddress", "status", "organisation", "team", "profile", "role"],
+    "properties": {
+        "firstName": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "lastName": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "emailAddress": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "password": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "status": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "organisation": {
+            "bsonType": "object",
+            "required": ["_id", "name"],
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId",
+                    "description": "Must be an ObjectId"
+                },
+                "name": {
+                    "bsonType": "string",
+                    "description": "Must be a string"
+                }
+            }
+        },
+        "team": {
+            "bsonType": "object",
+            "required": ["_id", "name"],
+            "properties": {
+                "_id": {
+                    "bsonType": "objectId",
+                    "description": "Must be an ObjectId"
+                },
+                "name": {
+                    "bsonType": "string",
+                    "description": "Must be a string"
+                }
+            }
+        },
+        "profile": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        },
+        "role": {
+            "bsonType": "string",
+            "description": "Must be a string"
+        }
+    }
+}
