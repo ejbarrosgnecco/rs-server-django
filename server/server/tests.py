@@ -52,7 +52,7 @@ class FieldValidationTestCase(TestCase):
                         "action": "Cold calling",
                         "color": "#000",
                         "restricted": False,
-                        "restrictedTo": []
+                        "restrictedTo": [2]
                     }
                 ],
                 "roles": [
@@ -69,4 +69,4 @@ class FieldValidationTestCase(TestCase):
         if passed["passed"] == False:
             print(passed["failedValues"])
             
-        self.assertEqual(passed["passed"], True)
+        self.assertEqual(passed["passed"], False)
