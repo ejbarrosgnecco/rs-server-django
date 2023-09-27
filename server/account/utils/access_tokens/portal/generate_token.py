@@ -11,8 +11,12 @@ class NewAccessToken:
 
     def generate_token(self):
         now = datetime.datetime.now()
-        expiry = now.replace(hour=23, minute=59, second=0)
-        expiry_time = (expiry - now).total_seconds()
+        end_day = now.replace(hour=23, minute=59, second=59)
+        epoch = datetime.datetime(1970, 1, 1)
+
+        delta = end_day - epoch
+
+        expiry = delta.total_seconds()
 
         token_secret = os.environ.get("PORTAL_ACCESS_SECRET")
         encode_data = {
@@ -30,12 +34,12 @@ class NewAccessToken:
             },
             "profile": self.user["profile"],
             "role": self.user["role"],
-            "exp": expiry_time
+            "exp": expiry
         }
 
         new_token = jwt.encode(encode_data, token_secret, "HS256")
         return {
             "accessToken": new_token,
-            "expiresIn": expiry_time,
+            "expiresAt": end_day.isoformat(),
             "type": "Bearer"
         }

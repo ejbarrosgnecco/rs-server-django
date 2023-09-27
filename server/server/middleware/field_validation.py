@@ -174,7 +174,7 @@ def run_validation (request_body, validation_file) -> bool:
     if no_additional_fields == False:
         return {
             "passed": False,
-            "failedValues": validation.additional_fields
+            "additionalValues": validation.additional_fields
         }
 
     """ Run validation on all fields """
@@ -189,3 +189,29 @@ def run_validation (request_body, validation_file) -> bool:
         return_value["failedValues"] = validation.failed_values
 
     return return_value
+
+def field_validation_middleware(func, request_body, validation_file):
+    validation = run_validation(request_body=request_body, validation_file=validation_file)
+
+    if validation["passed"] == True:
+        def inner(*args, **kwargs):
+            return func(*args, **kwargs)
+
+        return inner
+    else:
+        def fail_validation(*args, **kwargs):
+            return_value = {
+                "success": False,
+                "status": 400
+            }
+
+            if "additionalValues" in validation:
+                return_value["reason"] = "The following fields are not permitted: " + ", ".join(validation["additionalValues"])
+            elif "failedValues" in validation:
+                return_value["reason"] = "The following fields were incorrectly formatted: " + ", ".join(validation["failedValues"])
+            else:
+                return_value["reason"] = "One or more fields in this request were incorrectly formatted"
+
+            return return_value
+        
+        return fail_validation

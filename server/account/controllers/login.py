@@ -23,14 +23,16 @@ class AccountLoginAttempt:
         user_bytes = self.user["password"].encode("utf-8")
         
         password_match = bcrypt.checkpw(stored_bytes, user_bytes)
-        print(password_match)
+        return password_match
 
     def generate_access_token(self):
         new_token = NewAccessToken(self.user)
         return new_token.generate_token()
 
 
-def account_login(email_address, password):
+def account_login(args):
+    email_address, password = args["emailAddress"], args["password"]
+
     login_attempt = AccountLoginAttempt(email_address=email_address, password=password)
 
     """ Check that user exists inside of database """
@@ -38,7 +40,8 @@ def account_login(email_address, password):
     if user_found == False:
         return {
             "success": False,
-            "reason": "Incorrect email address or password combination, please try again"
+            "reason": "Incorrect email address or password combination, please try again",
+            "status": 401
         }
 
     """ Check that password matches """
@@ -46,7 +49,8 @@ def account_login(email_address, password):
     if password_match == False:
         return {
             "success": False,
-            "reason": "Incorrect email address or password combination, please try again"
+            "reason": "Incorrect email address or password combination, please try again",
+            "status": 401
         }
 
     """ Generate access token """
@@ -54,11 +58,13 @@ def account_login(email_address, password):
         access_token = login_attempt.generate_access_token()
         return {
             "success": True,
-            "data": access_token
+            "data": access_token,
+            "status": 200
         }
     except Exception as e:
         print(e)
         return {
             "success": False,
-            "reason": "Oops, there was a technical error, please try again"
+            "reason": "Oops, there was a technical error, please try again",
+            "status": 500
         }
